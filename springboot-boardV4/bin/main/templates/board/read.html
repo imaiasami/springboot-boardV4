@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/default.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+	function writeReply() {
+		let board_id = [[${board.board_id}]];
+		let reply = $("#reply").val();
+		console.log(board_id);
+		console.log(reply);
+		$.ajax({
+			url:"/reply/write",
+			type: "post",
+			data: {
+				"board_id": board_id,
+				"content": reply
+			},
+			success: function(result, success, xhr){
+				console.log(result);
+				console.log(success)
+				getReplies();
+			}
+		});
+	}
+	
+	function getReplies(){
+		let board_id = [[${board.board_id}]];
+		$.ajax({
+			url:"/reply/findReplies",
+			data:{"board_id": board_id},
+			success: function(result){
+				console.log(result);
+				showReplies(result);
+			}
+		});
+	}
+	
+	function showReplies(replies){
+		let code = "";
+		code += "<table>";
+		code += "	<tr>";
+		code += "		<th>No</th>";
+		code += "		<th>리플 내용</th>";
+		code += "		<th>작성자</th>";
+		code += "		<th>작성일</th>";
+		code += "	</tr>";
+		$(replies).each(function(idx, obj){
+			console.log(obj);
+			code += "<tr>"
+			code += "	<td>" + idx + "</td>"
+			code += "	<td>" + obj.content + "</td>"
+			code += "	<td>" + obj.id +"</td>"
+			code += "	<td>" + obj.input_date +"</td>"
+			code += "</tr>"
+		});
+		
+		code += "</table>";
+		$("#replies").html(code);
+		
+	}
+	
+	$(function(){
+		getReplies();
+	});
+	
+	
+</script>
+</head>
+<body>
+	<div id="container">
+		<h1>[ 게시글 읽기 ]</h1>
+		<table th:object="${board}">
+			<tr>
+				<th>제목</th>
+				<td th:text="*{title}"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td th:text=*{content}></td>
+			</tr>
+			<tr>
+				<th>조회수</th>
+				<td th:text="*{hit}"></td>
+			</tr>
+			<tr>
+				<th>작성자</th>
+				<td th:text="*{id}"></td>
+			</tr>
+			<tr>
+				<th>등록일</th>
+				<td th:text="*{input_date}"></td>
+			</tr>
+		</table>
+		<p>
+		<div class="center">
+			<input type="button" onclick="location.href='/board/list'"
+				value="목록으로">
+			<th:block th:if="${session.loginMember.id == board.id}">
+				<input type="button"
+					th:onclick="|location.href='@{/board/update/{board_id}(board_id=${board.board_id})}'|"
+					value="수정하기">
+				<input type="button"
+					th:onclick="|location.href='@{/board/remove/{board_id}(board_id=${board.board_id})}'|"
+					value="삭제하기">
+			</th:block>
+		</div>
+		<p>
+		<div>
+			<label for="reply">리플 쓰기 : </label> <input type="text" id="reply"
+				name="reply"> <input type="submit" value="리플 등록"
+				onclick="writeReply()">
+		</div>
+		<p>
+		<div id="replies"></div>
+	</div>
+</body>
+</html>

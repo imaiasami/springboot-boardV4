@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.login.mapper.ReplyMapper">
+
+	<!-- 리플 등록 -->
+	<insert id="saveReply">
+		<selectKey keyProperty="reply_id" resultType="long"
+			order="BEFORE">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into reply (
+		reply_id,
+		board_id,
+		id,
+		content
+		) values (
+		#{reply_id},
+		#{board_id},
+		#{id},
+		#{content}
+		)
+	</insert>
+	<!-- 리플 전체 목록 -->
+	<select id="findReplies" resultType="reply">
+		select * from reply where
+		board_id = #{board_id}
+	</select>
+	<!-- 하나의 리플 읽기 -->
+	<select id="findReply" resultType="reply">
+		select * from reply where
+		reply_id = #{reply_id}
+	</select>
+	<!-- 리플 수정 -->
+
+	<!-- 리플 삭제 -->
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

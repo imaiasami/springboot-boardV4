@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.login.mapper.BoardMapper">
+	
+	<!-- 게시글 전체 검색 -->
+	<select id="findAllBoards" resultType="board">
+		select * from boardv2
+	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="writeBoard">
+		<selectKey keyProperty="board_id" resultType="long" order="BEFORE">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into boardv2 (
+			board_id,
+			title,
+			content,
+			id
+		) values (
+			#{board_id},
+			#{title},
+			#{content},
+			#{id}
+		)
+	</insert>
+	
+	<!-- 게시글 검색 -->
+	<select id="findBoardById" resultType="board">
+		select * from boardv2 where board_id = #{board_id}
+	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard">
+		update boardv2
+		<set>
+			<if test="title != null">title = #{title},</if>
+			<if test="content != null">content = #{content},</if>
+			<if test="hit != null">hit = #{hit}</if>
+		</set>
+		where board_id = #{board_id}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="removeBoard">
+		delete from boardv2 where board_id = #{board_id}
+	</delete>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

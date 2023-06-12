@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/default.css">
+</head>
+<body>
+<div id="container">
+	<h1>[ 게시글 수정 ]</h1>
+	<form action="/board/update" method="post" th:object="${board}">
+		<table>
+			<tr>
+				<th>제목</th>
+				<td><input type="text" th:field="*{title}"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td><textarea cols="50" rows="15" th:field="*{content}"></textarea></td>
+			</tr>
+			<tr>
+				<th>조회수</th>
+				<td th:text="*{hit}"></td>
+			</tr>
+			<tr>
+				<th>작성자</th>
+				<td th:text="*{id}"></td>
+			</tr>
+			<tr>
+				<th>등록일</th>
+				<td th:text="*{input_date}"></td>
+			</tr>
+		</table>
+		<input type="hidden" th:field="*{board_id}">
+		<p>
+		<div class="center">
+			<input type="button" onclick="location.href='/board/list'" value="목록으로">
+			<input type="submit" value="수정하기">
+			<input type="reset" value="취소">
+		</div>
+	</form>
+</div>
+</body>
+</html>
